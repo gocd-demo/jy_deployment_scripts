@@ -1,0 +1,40 @@
+{
+  "format_version": 3,
+  "group": "Production",
+  "name": "deploy_to_prod",
+  "label_template": "${COUNT}",
+  "lock_behavior": "none",
+  "template": "deploy_and_test",
+  "parameters": [
+    {
+      "name": "INSTALLER_PIPELINE",
+      "value": "publish_installers/deploy_to_qa"
+    }
+  ],
+  "materials": [
+    {
+      "type": "git",
+      "name": "deployment_scripts",
+      "url": "https://github.com/gocd-demo/jy_deployment_scripts.git",
+      "destination": "deployment_scripts"
+    },
+    {
+      "type": "git",
+      "name": "functional_tests",
+      "url": "https://github.com/gocd-demo/jy_functional_tests.git",
+      "destination": "functional_tests"
+    },
+    {
+      "pipeline": "deploy_to_qa",
+      "stage": "run_user_tests",
+      "type": "dependency",
+      "name": "qa_dependency"
+    },
+    {
+      "pipeline": "performance_tests",
+      "stage": "benchmark",
+      "type": "dependency",
+      "name": "performance_tests_dependency"
+    }
+  ]
+}
